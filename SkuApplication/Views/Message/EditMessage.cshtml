@@ -1,0 +1,123 @@
+﻿@using SkuApplication.Models
+
+@model MessageViewModel
+
+@{
+    ViewBag.Title = "Verander bericht";
+}
+
+
+@if (Model.IsComment)
+{
+    using (Html.BeginForm("UpdateComment", "Message", FormMethod.Post))
+    {
+        <fieldset>
+            <div class="form-group">
+                @if (Convert.ToInt32(Session["clearance"]) == 5)
+                {
+                <label for="marked">
+                    Markeer
+
+                    <input type="checkbox" class="checkbox-inline checkbox" name="marked" value="true"
+                           @if (Model.IsMarked) { @: checked
+                           } />
+
+                    @*@Html.CheckBox("marked")*@
+                </label>
+                }
+                <label for="ArgMessage"></label>
+                @Html.TextArea("comment", Model.Comment.comment, new { @class = "form-control" })
+            </div>
+        </fieldset>
+        <button type="reset" class="btn btn-default btn-md" value="@Model.Comment.id" name="commentId">
+            <span class="glyphicon glyphicon-refresh"></span>
+            <abbr>Vernieuw</abbr>
+        </button>
+        <button type="submit" class="btn btn-primary btn-md" value="@Model.Comment.id" name="commentId">
+            <span class="glyphicon glyphicon-plus"></span>
+            <abbr>Verstuur</abbr>
+        </button>
+    }
+}
+else
+{
+    using (Html.BeginForm("UpdateMessage", "Message", FormMethod.Post))
+    {
+        <fieldset>
+            <div class="form-group">
+                @*<label for="ArgItem">
+                        Selecteer een onderwerp
+                        <select class="form-control" name="ArgItem">
+                            @foreach (var item in Model.CategoryList)
+                            {
+                                var style = (item.IsCategory) ? "color: red" : "";
+                                <option style="@style" value="@item.Name" @if (item.Name == @ViewBag.SelectedSubject) { @: selected
+                                        }>
+                                    @item.Name
+                                    @if (!item.IsCategory)
+                                    {@String.Concat("(", item.ParentName, ")")}
+                                </option>
+                            }
+                        </select>
+                    </label>*@
+
+                <label for="visibleToRoleId">
+                    Selecteer wie het mag zien
+                    <select class="form-control" name="visibleToRoleId">
+                        @foreach (var item in Model.RoleList)
+                        {
+                            <option value="@item.id" @if (item.id == Model.Message.visible_for_role_id) { @: selected
+                                    }>
+                                @item.description
+                            </option>
+                        }
+                    </select>
+                </label>
+                <label for="marked">
+                    Markeren?
+
+                    <input type="checkbox" class="checkbox-inline checkbox" name="marked" value="true"
+                           @if (Model.IsMarked) { @: checked
+                           } />
+
+
+                    @*@Html.CheckBox("marked")*@
+                </label>
+                @*<label for="followup">
+                    Opvolgen?
+
+                    <input type="checkbox" class="checkbox-inline checkbox" name="followup" value="true" id="myCheck" onclick="CheckboxFunc()"
+                           @if (Model.HasFollowup) { @: checked
+                           } />
+
+
+
+                    <span id="followupSearch" style="@if (Model.HasFollowup) { @:display:block;
+                        } else { @:display: none;
+                        } " class="form-control form-inline">
+                        <select name="followupUser">
+                           @foreach (var item in Model.FollowupUsernames)
+                            {
+                            <option value="@item.id"
+                               @if (item.id == Model.FollowupUser)
+                               {@:selected = "selected"
+                                    }>@item.username
+                            </option>
+                            }
+                        </select>
+                    </span>
+
+
+
+                   @Html.CheckBox("followup")
+                </label>*@
+                <label for="ArgMessage"></label>
+                @Html.TextArea("message", Model.Message.message, new { @class = "form-control" })
+            </div>
+        </fieldset>
+        <button type="submit" class="btn btn-primary btn-md" value="@Model.Message.id" name="messageId">
+            <span class="glyphicon glyphicon-ok"></span>
+            <abbr>Update</abbr>
+        </button>
+    }
+}

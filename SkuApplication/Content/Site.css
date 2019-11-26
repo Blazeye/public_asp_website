@@ -1,0 +1,182 @@
+﻿
+
+.check-width {
+    width: 10px;
+}
+
+body, html {
+    height: 100%;
+}
+
+body {
+    padding-top: 50px;
+    padding-bottom: 20px;
+}
+
+
+
+
+.comment-text{
+    /*margin: 12px;*/
+    padding: 12px;
+}
+
+.widget .panel-body {
+    padding: 0px;
+}
+
+.widget .list-group {
+    margin-bottom: 0;
+}
+
+.widget .panel-title {
+    display: inline
+}
+
+.widget .label-info {
+    float: right;
+}
+
+.widget li.list-group-item {
+    border-radius: 0;
+    border: 0;
+    border-top: 1px solid #ddd;
+}
+
+.widget li.list-group-item:hover {
+    background-color: rgba(86,61,124,.1);
+}
+
+.widget .mic-info {
+    color: #666666;
+    font-size: 11px;
+}
+
+.widget .action {
+    margin-top: 5px;
+}
+
+.widget .comment-text {
+    font-size: 12px;
+}
+
+.widget .btn-block {
+    border-top-left-radius: 0px;
+    border-top-right-radius: 0px;
+}
+
+/*.commentstyle {
+    border: 2px dotted red;
+}*/
+
+.panelstyle {
+    background-color:transparent; 
+    border: hidden;
+}
+
+
+
+
+
+
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+input,
+select,
+textarea {
+    max-width: 100%;
+}
+
+@media screen and (min-width: 992px) and (min-height: 720px) {
+    .sticky-top {
+        position: sticky;
+        top: 40px;
+        /*padding-right: 25px;*/
+    }
+}
+
+.bg {
+    /* The image used */
+    background-image: url("../Public/background_lighter.jpg");
+    /* Full height */
+    height: 100%;
+    /* Center and scale the image nicely */
+    background-attachment: fixed;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.jumbotron {
+    background-color: #51a7c8;
+    width:100%;
+    height:100%;
+}
+
+
+.navbar-inverse{
+    background-color: #2f6f6e;
+    border: #2f6f6e;
+}
+
+.navlight {
+    color: aliceblue !important;
+}
+
+.navlight:hover {
+    color: #c0c05c !important;
+}
+.navlight:active {
+    color: #2a2f38 !important;
+}
+
+.navbar-brand {
+    color: #0c0c0d !important;
+}
+
+.navbar-brand:active {
+    color: #64a493 !important;
+}
+
+.darkcolor {
+    color: white !important;
+    text-shadow: -1px -1px 0 #2f6f6e, 1px -1px 0 #2f6f6e, -1px 1px 0 #2f6f6e, 1px 1px 0 #2f6f6e;
+}
+
+footer {
+    background-color: #2f6f6e !important;
+    color:aliceblue;
+    width: 100%;
+    padding: 10px 5px 2px 0;
+}
+
+.menu-dropdown input, select {
+    display: inline-block;
+    width: 20em;
+}
+
+.menu-dropdown label {
+    display: inline-block;
+    width: 20em;
+    margin-right: .5em;
+    padding-top: 1.5em;
+    text-align:center;
+}
+
+
+
+
+

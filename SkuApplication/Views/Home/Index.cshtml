@@ -1,0 +1,309 @@
+﻿@using SkuApplication.Models
+
+@model CommentListViewModel
+
+@{
+    ViewBag.Title = "Logboek";
+}
+    <link href="~/Content/Site.css" rel="stylesheet" />
+
+<div class="container">
+    <div class="row">
+
+        @Html.Action("Menu", "Nav")
+
+
+        <div class="panel panel-default widget panelstyle">
+
+            <div class="panel-heading" style="margin-top: 2em">
+                <span style="float:left;">
+                    @*Paginering*@
+                    @if (Model.PagingData.CurrentPage > 1)
+                    {
+                        @Html.ActionLink("1",
+                                         "Index",
+                                         "Home",
+                                         new { page = 1, category = Model.SearchData.CurrentCategory, subject = Model.SearchData.CurrentSubject, date = Model.SearchData.CurrentDate, marked = Model.SearchData.CurrentMarked, followup = Model.SearchData.CurrentFollowup },
+                                         new { @class = "btn btn-xs" });
+                    }
+                    @if (Model.PagingData.CurrentPage > 3)
+                    {
+                        @:..
+                    }
+                    @if (Model.PagingData.CurrentPage > 2)
+                    {
+                        @Html.ActionLink(Convert.ToString(Model.PagingData.CurrentPage - 1),
+                                        "Index",
+                                        "Home",
+                                        new { page = (Model.PagingData.CurrentPage - 1), category = Model.SearchData.CurrentCategory, subject = Model.SearchData.CurrentSubject, date = Model.SearchData.CurrentDate, marked = Model.SearchData.CurrentMarked, followup = Model.SearchData.CurrentFollowup },
+                                        new { @class = "btn btn-xs" })
+                    }
+                    @if (Model.PagingData.CurrentPage != 0)
+                    {
+                        @Html.ActionLink(Convert.ToString(Model.PagingData.CurrentPage),
+                                        "Index",
+                                        "Home",
+                                        new { page = (Model.PagingData.CurrentPage), category = Model.SearchData.CurrentCategory, subject = Model.SearchData.CurrentSubject, date = Model.SearchData.CurrentDate, marked = Model.SearchData.CurrentMarked, followup = Model.SearchData.CurrentFollowup },
+                                        new { @class = "btn btn-xs btn-primary" })
+                    }
+                    @if (Model.PagingData.CurrentPage < (Model.PagingData.TotalPages - 1))
+                    {
+                        @Html.ActionLink(Convert.ToString(Model.PagingData.CurrentPage + 1),
+                                        "Index",
+                                        "Home",
+                                        new { page = (Model.PagingData.CurrentPage + 1), category = Model.SearchData.CurrentCategory, subject = Model.SearchData.CurrentSubject, date = Model.SearchData.CurrentDate, marked = Model.SearchData.CurrentMarked, followup = Model.SearchData.CurrentFollowup },
+                                        new { @class = "btn btn-xs" })
+                    }
+                    @if (Model.PagingData.CurrentPage < (Model.PagingData.TotalPages - 2))
+                    {
+                        @:..
+                    }
+                    @if (Model.PagingData.CurrentPage < Model.PagingData.TotalPages)
+                    {
+                        @Html.ActionLink(Convert.ToString(Model.PagingData.TotalPages),
+                                                          "Index",
+                                                          "Home",
+                                                          new { page = Model.PagingData.TotalPages, category = Model.SearchData.CurrentCategory, subject = Model.SearchData.CurrentSubject, date = Model.SearchData.CurrentDate, marked = Model.SearchData.CurrentMarked, followup = Model.SearchData.CurrentFollowup },
+                                                          new { @class = "btn btn-xs" })
+                    }
+
+                </span>
+                <span class="glyphicon glyphicon-comment"></span>
+                <h3 class="panel-title">
+                    Recente Berichten
+                </h3>
+
+
+                @if (Convert.ToInt32(Session["clearance"]) >= 4)
+                {
+                    using (Html.BeginForm("Message", "Message", FormMethod.Post, new { style = "display:table; float:right; vertical-align:middle" }))
+                    {
+                        <input type="hidden" value="@Session["id"]" name="userid" id="userid" />
+                        <button type="submit" class="btn btn-info btn-md" style="vertical-align:top; padding:3px;" title="Highlight">Nieuw bericht</button>
+                    }
+                }
+
+
+            </div>
+
+            <div class="panel-body">
+
+                <div>
+                    @foreach (var item in Model.CommentList)
+                    {
+                        if (!item.IsComment || (item.UpdatedDate >= Convert.ToDateTime(Session["last_logout"]) && Session["last_logout"] != null))
+                        {
+                        @:</div>
+                    }
+                    <ul class="list-group">
+                        <li class="list-group-item" style="
+                               @if (item.IsComment) { @: background-color: #D5E8EA;
+                                    if (item.UpdatedDate >= Convert.ToDateTime(Session["last_logout"]) && Session["last_logout"] != null)
+                                    { @: background-color: #E5E8AA;
+                                    }
+                                }
+
+                                else { @: margin-top: 15px;
+                                }
+
+                                @if (item.IsMarked && Convert.ToInt32(Session["clearance"]) == 5) { @: border: 2px dotted red;
+                                }">
+                            <div class="row">
+                                <div class="col-xs-6 col-md-5">
+                                    <span class="action">
+                                        <label for="button"><small class="text-muted">Bericht door: </small>@item.Username</label>
+                                        @if (Convert.ToInt32(Session["clearance"]) == 5)
+                                        {
+                                            if (!item.IsComment)
+                                            {
+                                                using (Html.BeginForm("SetMessageMarked", "Home", FormMethod.Post, new { style = "display:inline", @class = "form-inline" }))
+                                                {
+                                                    <input type="hidden" value="@item.ActualId" name="actualId" id="actualId" />
+                                                    <button type="submit" class="btn btn-warning btn-xs" title="Highlight" name="IsComment" value="@item.IsComment">
+                                                        <span class="glyphicon glyphicon-bell"></span>
+                                                    </button>
+                                                }
+                                            }
+                                            else
+                                            {
+                                                using (Html.BeginForm("SetCommentMarked", "Home", FormMethod.Post, new { style = "display:inline", @class = "form-inline" }))
+                                                {
+                                                    <input type="hidden" value="@item.ActualId" name="actualId" id="actualId" />
+                                                    <button type="submit" class="btn btn-warning btn-xs" title="Highlight">
+                                                        <span class="glyphicon glyphicon-bell"></span>
+                                                    </button>
+                                                }
+                                            }
+
+                                            if (item.UserId == Convert.ToInt32(Session["id"]))
+                                            {
+                                                using (Html.BeginForm("EditMessage", "Message", FormMethod.Post, new { style = "display:inline", @class = "form-inline" }))
+                                                {
+                                                    <button type="submit" class="btn btn-success btn-xs" title="Edit" name="messageId" value="@item.ActualId"
+                                                            formaction="@Url.Action("EditMessage", "Message",
+                                                                                new { messageId = item.ActualId, IsComment = item.IsComment/*, ArgSubject = item.Subject, ArgCategory = item.Category */})">
+                                                        <span class="glyphicon glyphicon-pencil"></span>
+                                                    </button>
+                                                }
+                                            }
+                                        }
+
+                                    </span>
+
+
+                                    <div><small class="text-muted"> Aanmaakdatum: @item.CreatedDate</small></div>
+                                    <div>
+                                        @if (item.UpdatedDate != item.CreatedDate)
+                                        {
+                                            <small class="text-muted">
+                                                Laatst gewijzigd:
+                                                @item.UpdatedDate
+                                            </small>
+                                        }
+                                    </div>
+
+                                    @if (item.IsFollowUp && !item.IsComment)
+                                    {
+                                        <div>
+                                            <small class="text-muted"><span class="glyphicon glyphicon-asterisk"></span> Opgevolgd door: </small>
+                                            @if (item.SignedFollowUp)
+                                            {
+                                                @item.FollowUpName
+                                            }
+                                            else if (Convert.ToInt32(Session["clearance"]) >= 3)
+                                            {
+                                                using (Html.BeginForm("SetFollowupUser", "Home", FormMethod.Post, new { style = "display:inline", @class = "form-inline" }))
+                                                {
+                                                    <input type="hidden" value="@item.ActualId" name="actualId" id="actualId" />
+                                                    <button type="submit" class="btn btn-info btn-xs" title="Highlight" name="IsComment" value="@item.IsComment">
+                                                        <span class="glyphicon glyphicon-user"></span>
+                                                        Volg dit bericht op?
+                                                    </button>
+                                                }
+
+                                            }
+                                            else
+                                            { <small class="text-danger">nog te bepalen</small>
+                                            }
+                                        </div>
+
+                                        if (Convert.ToInt32(Session["clearance"]) >= 3 && item.SignedFollowUp)
+                                        {
+                                            <div>
+                                                <small class="text-muted"> Opgevolgd op: </small>
+                                                @if (item.FollowUpDate == null)
+                                                {
+                                                    if (@item.FollowUpName != @Convert.ToString(@Session["username"]))
+                                                    {<small class="text-danger">nog te bepalen</small>}
+                                                    else
+                                                    {
+                                                        using (Html.BeginForm("SetFollowupDate", "Home", FormMethod.Post, new { style = "display:inline", @class = "form-inline" }))
+                                                        {
+                                                            <input type="hidden" value="@item.ActualId" name="actualId" id="actualId" />
+                                                            <button type="submit" class="btn btn-primary btn-sm" title="Highlight" name="IsComment" value="@item.IsComment">
+                                                                Opvolging voltooid?
+                                                            </button>
+                                                        }
+                                                    }
+                                                }
+                                                else
+                                                { @item.FollowUpDate}
+                                            </div>
+                                        }
+                                    }
+
+
+                                    @if (item.IsComment == false)
+                                    {
+                                        <div>
+                                            <small class="text-muted">Categorie: @Html.ActionLink(item.Category, "Index", "Home", new { category = item.Category }, null)</small>
+                                        </div>
+                                        if (!String.IsNullOrEmpty(item.Subject))
+                                        {
+                                            <div>
+                                                <small class="text-muted">Onderwerp: @Html.ActionLink(item.Subject, "Index", "Home", new { subject = item.Subject }, null)</small>
+                                            </div>
+                                        }
+                                    }
+
+
+
+                                </div>
+                                <div class="col-xs-6 col-md-7">
+                                    <div class="comment-text">
+                                        <p style="color: @item.Color">@item.Message</p>
+                                    </div>
+                                </div>
+                                <div class="action text-right">
+                                    @if (item.IsComment == false)
+                                    {
+                                        if (Model.CommentList.Count(m => m.NrOfMessage == item.NrOfMessage) > 1)
+                                        {
+                                            @:<button class="btn btn-outline- btn-md" type="button" data-toggle="collapse" data-target="#@("C" + item.NrOfMessage)" aria-expanded="false" aria-controls="@("C" + item.NrOfMessage)"><span class="small text-muted">aantal reacties: @(Model.CommentList.Count(m => m.NrOfMessage == item.NrOfMessage) - 1)</span></button>
+                                        }
+                                        if (Convert.ToInt32(Session["clearance"]) >= 4)
+                                        {
+                                            <button type="button" class="btn btn-info btn-sm bottom-0 pr-1" data-toggle="collapse" data-target="#@item.NrOfMessage" aria-expanded="false" aria-controls="@item.Id" title="React">
+                                                <span class="glyphicon glyphicon-arrow-down">
+                                                    <abbr class="">Reply</abbr>
+                                                </span>
+                                            </button>
+                                        }
+                                    }
+                                </div>
+                            </div>
+                            @*<div class="row">
+                            <div class="collapse reply-textbox" id="@item.Id">
+
+                               @using (Html.BeginForm("Create", "Home", FormMethod.Post))
+                                {
+                                    <div class="form-group">
+                                        <label for="comment"></label>
+
+                                        @Html.TextArea("ArgComment", null, new { @class = "form-control" })
+
+                                    </div>
+                                    <input type="hidden" value="@item.ActualId" name="ArgMessageId" />
+                                    <input type="hidden" value="@Session["Id"]" name="ArgUserId" />
+                                    <button type="submit" class="btn btn-primary btn-md">Send</button>
+                                }
+
+                            </div>
+                        </div>*@
+                        </li>
+                    </ul>
+                    if (item.AddReplyBox)
+                    {
+                    @:</div>
+                    <div class="row">
+                        <div class="collapse reply-textbox" id="@item.NrOfMessage">
+
+                            @using (Html.BeginForm("Create", "Home", FormMethod.Post))
+                            {
+                                <div class="form-group">
+                                    <label for="comment"></label>
+
+                                    @Html.TextArea("ArgComment", null, new { @class = "form-control" })
+
+                                </div>
+                                <input type="hidden" value="@item.ActualId" name="ArgMessageId" />
+                                <input type="hidden" value="@Session["Id"]" name="ArgUserId" />
+                                <button type="submit" class="btn btn-primary btn-md">Send</button>
+                            }
+
+                        </div>
+                    </div>
+                    @:<div>
+                    }
+
+                    if (!item.IsComment || (item.UpdatedDate >= Convert.ToDateTime(Session["last_logout"]) && Session["last_logout"] != null))
+                    {
+                        @:<div class="collapse" id="@("C" + item.NrOfMessage)">
+                        }
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+

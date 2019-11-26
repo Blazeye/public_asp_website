@@ -1,0 +1,69 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SKU - @ViewBag.Title</title>
+    @Styles.Render("~/Content/css")
+    @Scripts.Render("~/bundles/modernizr")
+    @Scripts.Render("~/bundles/Site")
+</head>
+<body>
+    <div>
+        <div class="py-5 text-center bg">
+            <div class="navbar navbar-inverse navbar-fixed-top">
+                <div class="container">
+                    <div class="navbar-header">
+                        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        @Html.ActionLink("SKU", "Index", "Home", new { area = "" }, new { @class = "navbar-brand" })
+                    </div>
+                    <div class="navbar-collapse collapse">
+                        <ul class="nav navbar-nav">
+                            <li>@Html.ActionLink("Logboek", "Index", "Home", new { area = "" }, new { @class = "navlight" })</li>
+                           @if (Convert.ToInt32(Session["clearance"]) == 5)
+                            {
+                            <li>@Html.ActionLink("Administratie", "Admin", "Admin", new { area = "" }, new { @class = "navlight" })</li>
+                            }
+                           @if (Session["username"] == null)
+                            {
+                            <li>@Html.ActionLink("Log in", "Login", "User", new { area = "" }, new { @class = "navlight" })</li>
+                            }
+                            else
+                            {
+                            <li>@Html.ActionLink("Log uit", "Logout", "User", new { area = "" }, new { @class = "navlight" })</li>
+                            }
+                        </ul>
+                        @if (Session["username"] != null)
+                        {<p style="color:black" class="navbar-text px-5">@Session["username"]</p>}
+                    </div>
+
+                </div>
+            </div>
+            <div class="jumbotron jumbotron-fluid">
+                <div class="container-fluid">
+                    <div class="text-center darkcolor">
+                        <h1>@ViewBag.Title</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="container body-content">
+                @RenderBody()
+                <hr />
+            </div>
+            <footer class="footer">
+                <div class="text-right footer_contents">
+                    <p>Made with <a class="" href="https://www.glyphicons.com/">glyphicons</a>, &copy; 2018 M&N</p>
+                </div>
+            </footer>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/bundles/bootstrap")
+    @RenderSection("scripts", required: false)
+</body>
+</html>

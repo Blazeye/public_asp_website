@@ -1,0 +1,126 @@
+﻿@using SkuApplication.Models
+
+@model NavMenuViewModel
+
+<script type="text/javascript" src="~/Scripts/MyJQueryScriptFile.js"></script>
+
+@Html.ActionLink("Alles", "Index", "Home", null,
+    new { @class = "btn btn-default btn-lg" })
+
+
+@foreach (var link in Model.MenuCatItems)
+{
+    if (link.IsCategory)
+    {
+        @Html.RouteLink(link.Name, new
+         {
+             controller = "Home",
+             action = "Index",
+             category = link.Name,
+             page = 1,
+         },
+         new
+         {
+             @class = "btn btn-default btn-lg"
+                 + (link.Name == ViewBag.SelectedCategory ? " btn-primary" : "")
+         })
+    }
+}
+
+<form class="form-inline menu-dropdown" method="post">
+    <div class="form-group">
+        <div>
+
+
+        </div>
+        <label for="subject">
+            Selecteer een onderwerp
+            <select class="form-control" id="subject" name="subject">
+                <option style="color:red">Alle categorieën en onderwerpen</option>
+                @foreach (var item in Model.MenuCatItems)
+                {
+                    if (item.ParentName == ViewBag.SelectedCategory || ViewBag.SelectedCategory == null)
+                    {
+                        var style = (item.IsCategory) ? "color: red" : "";
+                        <option style="@style" value="@item.Name" @if (item.Name == @ViewBag.SelectedSubject) { @: selected
+                                }>
+                            @item.Name
+                            @if (!item.IsCategory)
+                            {@String.Concat("(", item.ParentName, ")")}
+                        </option>
+                    }
+                }
+            </select>
+        </label>
+        <label for="date">
+            Selecteer een periode
+            <select class="form-control" id="date" name="date">
+               @foreach (var item in Model.MenuDateItems)
+                {
+                    <option value="@item" @if (item == @ViewBag.SelectedDate) { @: selected
+                            }>
+                        @item
+                    </option>
+                }
+
+            </select>
+        </label>
+       @if (Convert.ToInt32(Session["clearance"]) == 5)
+        {
+    <label for="marked">
+        Gemarkeerd?
+        <input type="checkbox" class="checkbox-inline checkbox" name="marked" value="true"
+           @if (Model.MenuIsMarked) { @:checked
+                } />
+        @*@Html.CheckBox("marked")*@
+    </label>
+        }
+
+    <label for="followup">
+        Opvolging?
+
+        <input type="checkbox" class="checkbox-inline checkbox" name="followup" value="true" id="myCheck" onclick="CheckboxFunc()" 
+               @if (Model.MenuHasFollowup) { @:checked
+               }/>
+
+
+        <span id="followupSearch" style="@if (Model.MenuHasFollowup) { @:display:block; 
+            } else { @:display: none;
+            } " class="form-control form-inline">
+            <select name="followupDescr">
+                <option value="">Zoek wiens opvolgingen?</option>
+                <option value="MijnOpvolgingen" @if(Model.MenuFollowupRoleItems == "MijnOpvolgingen")
+                {@:selected = "selected"
+                }>Mijn opvolgingen</option>
+                <option value="Medewerker" @if (Model.MenuFollowupRoleItems == "Medewerker")
+                {@:selected = "selected"
+                }>Medewerker</option>
+                <option value="Dierverzorger" @if (Model.MenuFollowupRoleItems == "Dierverzorger")
+                {@:selected = "selected"
+                }>Dierverzorger</option>
+            </select>
+        </span>
+    </label>
+
+
+
+
+
+        @*<label for="followup">
+            Opvolging?
+            @Html.CheckBox("followup")
+        </label>*@
+
+        <input type="hidden" name="page" value="1" />
+        <button type="submit" class="btn btn-primary">
+            <span class="glyphicon glyphicon-search"></span>
+            <abbr>Zoek</abbr>
+        </button>
+    </div>
+</form>
+
+
+
+
+
+
